@@ -11,7 +11,11 @@ let app = express()
 app.use(express.json())
 app.use(cookieParser())
 
-app.use("api/auth", authRoutes)
+app.get('/', (req, res) => {
+    res.send('OneCart Backend is running!');
+});
+
+app.use("/api/auth", authRoutes)
 
 app.listen(port,() => {
     console.log("Hello from Server");
