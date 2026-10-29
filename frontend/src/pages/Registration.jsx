@@ -17,7 +17,7 @@ function Registration() {
 
     let navigate = useNavigate()
 
-    const handleSignUp = async (e) => {
+    const handleSignup = async (e) => {
       e.preventDefault()
       try {
         const result = await axios.post(serverUrl + '/api/auth/registration',{
@@ -25,7 +25,7 @@ function Registration() {
         },{withCredentials : true})
         console.log(result.data)
       } catch (error) {
-        console.log(error);
+        console.log("Registration error:", error.response?.data);
       }
     }
   return (
@@ -46,7 +46,7 @@ function Registration() {
     <div className='max-w-[600px] w-[90%] h-[500px] bg-[#00000025]
     border-[1px] border-[#96969635] backdrop:blur-2xl
     rounded-lg shadow-lg flex items-center justify-center'>
-        <form action="" onSubmit={handleSignUp} className='w-[90%] h-[90%]
+        <form action="" onSubmit={handleSignup} className='w-[90%] h-[90%]
         flex flex-col items-center justify-start gap=[20px]'>
             <div className='w-[90%] h-[50px] bg-[#42656cae]
             rounded-lg flex items-center justify-center gap=[10px]

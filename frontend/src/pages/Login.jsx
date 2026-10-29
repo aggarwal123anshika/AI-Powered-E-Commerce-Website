@@ -5,9 +5,30 @@ import { useNavigate } from 'react-router-dom'
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEye } from "react-icons/io5";
 import { useState } from 'react';
+import { useContext } from 'react';
+import { authDataContext } from '../context/authContext';
+import axios from 'axios';
 function Login() {
   let [show, setShow] = useState(false)
-      let navigate = useNavigate()
+  let [email, setEmail] = useState("")
+  let [password, setPassword] = useState("")
+  let {serverUrl} = useContext(authDataContext)
+
+
+
+  let navigate = useNavigate()
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    try {
+      let result = await axios.post(serverUrl + '/api/auth/login', {
+        email, password
+      }, {withCredentials : true})
+      console.log(result.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
     return (
       <div className="w-screen min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025]
        text-white flex flex-col items-center justify-start">
@@ -20,18 +41,18 @@ function Login() {
   
         <div className='w-full h-full flex items-center
          justify-center flex-col gap-[10px]'>
-          <span className='text-[25px] font-semibold'> Registration Page</span>
+          <span className='text-[25px] font-semibold'> Login Page</span>
           <span className='text-[16px]'>Welcome to OneCart, Place your order</span>
         </div>
       <div className='max-w-[600px] w-[90%] h-[500px] bg-[#00000025]
       border-[1px] border-[#96969635] backdrop:blur-2xl
       rounded-lg shadow-lg flex items-center justify-center'>
-          <form action="" className='w-[90%] h-[90%]
+          <form action="" onSubmit={handleLogin} className='w-[90%] h-[90%]
           flex flex-col items-center justify-start gap=[20px]'>
               <div className='w-[90%] h-[50px] bg-[#42656cae]
               rounded-lg flex items-center justify-center gap=[10px]
               py-[20px] cursor-pointer'>
-                  <img src={google} alt="" className='w-[20px]'/> Registration With Google
+                  <img src={google} alt="" className='w-[20px]'/> Login Account With Google
               </div>
               <div className='w-full h-[20px] flex items-center
               justify-center gap-[10px]'>
@@ -45,11 +66,11 @@ function Login() {
                  <input type="text" className='w-full h-[50px] border=[2px]
                 border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
                 placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Email'
-                 required />
+                 required onChange={(e) => setEmail(e.target.value)} value={email}/>
                  <input type={show?"text":"password"} className='w-full h-[50px] border=[2px]
                 border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
                 placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Password'
-                 required />
+                 required onChange={(e) => setPassword(e.target.value)} value={password}/>
                  {!show && <IoEyeOutline className='w-[20px] h-[20px] cursor-pointer
                   absolute right-[5%] bottom-[57%]' onClick={() => setShow(prev => !prev)}/>}
                  {show && <IoEye className='w-[20px] h-[20px] cursor-pointer
