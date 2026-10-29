@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from "../assets/logo.png"
 import google from "../assets/google.png"
 import { useNavigate } from 'react-router-dom'
+import { IoEyeOutline } from "react-icons/io5";
+import { IoEye } from "react-icons/io5";
 function Registration() {
+    let [show, setShow] = useState(false)
     let navigate = useNavigate()
   return (
     <div className="w-screen min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025]
@@ -34,6 +37,31 @@ function Registration() {
                 <div className='w-[40%] h-[1px] bg-[#96969635]'></div>
                  Or
                  <div className='w-[40%] h-[1px] bg-[#96969635]'></div>
+            </div>
+            <div className="w-[90%] h-[400px] flex flex-col 
+            items-center justify-center gap-[15px] relative">
+              <input type="text" className='w-full h-[50px] border=[2px]
+              border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
+              placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='UserName'
+               required />
+               <input type="text" className='w-full h-[50px] border=[2px]
+              border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
+              placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Email'
+               required />
+               <input type={show?"text":"password"} className='w-full h-[50px] border=[2px]
+              border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
+              placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Password'
+               required />
+               {!show && <IoEyeOutline className='w-[20px] h-[20px] cursor-pointer
+                absolute right-[5%]' onClick={() => setShow(prev => !prev)}/>}
+               {show && <IoEye className='w-[20px] h-[20px] cursor-pointer
+                absolute right-[5%]' onClick={() => setShow(prev => !prev)}/>}
+               <button className='w-full h-[50px] bg-[#6060f5]
+               rounded-lg flex items-center justify-center mt-[20px]
+               text-[17px] font-semibold'>Create Account</button>
+               <p className='flex gap-[10px]'>You have any account?<span
+               className='text-[#5555f6cf] text-[17px] font-semibold
+                cursor-pointer' onClick={() => navigate("/login")}>Login</span></p>
             </div>
         </form>
     </div>
