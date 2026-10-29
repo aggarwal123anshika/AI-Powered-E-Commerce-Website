@@ -1,12 +1,33 @@
-import React, { useState } from 'react'
+import React from 'react'
 import logo from "../assets/logo.png"
 import google from "../assets/google.png"
 import { useNavigate } from 'react-router-dom'
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEye } from "react-icons/io5";
+import { useContext } from 'react';
+import { useState } from 'react';
+import { authDataContext } from '../context/authContext';
+import axios from "axios"
 function Registration() {
     let [show, setShow] = useState(false)
+    let {serverUrl} = useContext(authDataContext)
+    let [name, setName] = useState("")
+    let [email, setEmail] = useState("")
+    let [password, setPassword] = useState("")
+
     let navigate = useNavigate()
+
+    const handleSignUp = async (e) => {
+      e.preventDefault()
+      try {
+        const result = await axios.post(serverUrl + '/api/auth/registration',{
+          name, email, password
+        },{withCredentials : true})
+        console.log(result.data)
+      } catch (error) {
+        console.log(error);
+      }
+    }
   return (
     <div className="w-screen min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025]
      text-white flex flex-col items-center justify-start">
@@ -25,7 +46,7 @@ function Registration() {
     <div className='max-w-[600px] w-[90%] h-[500px] bg-[#00000025]
     border-[1px] border-[#96969635] backdrop:blur-2xl
     rounded-lg shadow-lg flex items-center justify-center'>
-        <form action="" className='w-[90%] h-[90%]
+        <form action="" onSubmit={handleSignUp} className='w-[90%] h-[90%]
         flex flex-col items-center justify-start gap=[20px]'>
             <div className='w-[90%] h-[50px] bg-[#42656cae]
             rounded-lg flex items-center justify-center gap=[10px]
@@ -43,15 +64,15 @@ function Registration() {
               <input type="text" className='w-full h-[50px] border=[2px]
               border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
               placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='UserName'
-               required />
+               required onChange={(e) => setName(e.target.value)} value={name}/>
                <input type="text" className='w-full h-[50px] border=[2px]
               border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
               placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Email'
-               required />
+               required onChange={(e) => setEmail(e.target.value)} value={email}/>
                <input type={show?"text":"password"} className='w-full h-[50px] border=[2px]
               border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
               placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Password'
-               required />
+               required onChange={(e) => setPassword(e.target.value)} value={password}/>
                {!show && <IoEyeOutline className='w-[20px] h-[20px] cursor-pointer
                 absolute right-[5%]' onClick={() => setShow(prev => !prev)}/>}
                {show && <IoEye className='w-[20px] h-[20px] cursor-pointer
