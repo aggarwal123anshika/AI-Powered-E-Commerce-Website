@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import logo from '../assets/logo.png'
-
+import { IoSearchCircleOutline } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { userDataContext } from '../context/UserContext';
+import { IoSearchCircle } from "react-icons/io5";
 function Nav() {
+    let {userData} = useContext(userDataContext)
+    let [showSearch, setShowSearch] = useState(false)
+    let [showProfile, setShowProfile] = useState(false)
   return (
     <div className='w-full h-[70px] bg-[#ecfafaec]
     z-10 fixed top-0 flex items-center justify-between
@@ -13,8 +20,53 @@ function Nav() {
             <h1 className='text-[25px] text-[black]
             font-sans'>OneCart</h1>
         </div>
-        <div className='w-[40%]'></div>
-
+        <div className='w-[40%]'>
+            <ul className='flex items-center justify-center
+            gap-[19px] text-[white]'>
+                <li className='text-[15px] hover:bg-slate-500
+                cursor-pointer bg-[#000000c9] py-[10px]
+                px-[20px] rounded-2xl'>HOME</li>
+                <li className='text-[15px] hover:bg-slate-500
+                cursor-pointer bg-[#000000c9] py-[10px]
+                px-[20px] rounded-2xl'>COLLECTIONS</li>
+                <li className='text-[15px] hover:bg-slate-500
+                cursor-pointer bg-[#000000c9] py-[10px]
+                px-[20px] rounded-2xl'>ABOUT</li>
+                <li className='text-[15px] hover:bg-slate-500
+                cursor-pointer bg-[#000000c9] py-[10px]
+                px-[20px] rounded-2xl'>CONTACT</li>
+            </ul>
+        </div>
+        <div className='w-[30%] flex items-center justify-end
+        gap-[20px]'>
+        {!showSearch && <IoSearchCircleOutline className='w-[38px] h-[38px]
+        text-[#000000] cursor-pointer' onClick={()=> setShowSearch(prev => !prev)}/>}
+         {showSearch && <IoSearchCircle className='w-[38px] h-[38px]
+        text-[#000000] cursor-pointer' onClick={()=> setShowSearch(prev => !prev)}/>}
+        {!userData && <CgProfile className='w-[29px] h-[29px] text-[#000000]
+        cursor-pointer'/>}
+        {userData && <div className='w-[30px] h-[30px] bg-[#080808]
+        text-[white] rounded-full flex items-center
+         justify-center'>{userData ?.name.slice(0,1)}</div>}
+        <MdOutlineShoppingCart className='w-[30px] h-[30px] text-[#000000]
+        cursor-pointer'/>
+        <p className='absolute w-[18px] items-center md:flex
+        justify-center bg-black px-[5px] py-[2px]
+        text-white rounded-full text-[9px] top-[10px]
+        right-[23px]'>10</p>
+        </div>
+       {showSearch && <div className='w-full h-[80px] bg-[#d8f6f9dd]
+        absolute top-[100%] left-0 right-0 flex
+        items-center justify-center'>
+            <input type="text" className='w-[50%] h-[60%]
+            bg-[#233533] rounded-[30px] px-[50px]
+            placeholder:text-white text-[white] text-[18px]
+            'placeholder='Search Here' />
+        </div>}
+        <div className='absolute w-[220px] h-[150px]
+        bg-[#000000d7] top-[110%] right-[4%] border-[1px]
+        border-[#aaa9a9] rounded-[10px] z-10'>
+        </div>
     </div>
   )
 }
