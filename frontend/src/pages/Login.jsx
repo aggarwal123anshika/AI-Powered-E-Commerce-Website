@@ -8,13 +8,16 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { authDataContext } from '../context/authContext';
 import axios from 'axios';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../utils/Firebase';
+import { userDataContext } from '../context/UserContext';
+
 function Login() {
   let [show, setShow] = useState(false)
   let [email, setEmail] = useState("")
   let [password, setPassword] = useState("")
   let {serverUrl} = useContext(authDataContext)
-
-
+  let {getCurrentUser} = useContext(userDataContext)
 
   let navigate = useNavigate()
 
@@ -25,10 +28,29 @@ function Login() {
         email, password
       }, {withCredentials : true})
       console.log(result.data)
+      getCurrentUser()
+      navigate("/")
+
     } catch (error) {
       console.log(error);
     }
   }
+
+  const googlelogin = async () => {
+        try {
+            const response = await signInWithPopup(auth, provider)
+            let user = response.user;
+            let name = user.displayName;
+            let email = user.email;
+  
+            const result = await axios.post(serverUrl + "/api/auth/googlelogin",
+              {name, email}, {withCredentials : true})
+              console.log(result.data)
+  
+        } catch (error) {
+          console.log(error)
+        }
+      }
     return (
       <div className="w-screen min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025]
        text-white flex flex-col items-center justify-start">
@@ -51,7 +73,7 @@ function Login() {
           flex flex-col items-center justify-start gap=[20px]'>
               <div className='w-[90%] h-[50px] bg-[#42656cae]
               rounded-lg flex items-center justify-center gap=[10px]
-              py-[20px] cursor-pointer'>
+              py-[20px] cursor-pointer' onClick={googlelogin}>
                   <img src={google} alt="" className='w-[20px]'/> Login Account With Google
               </div>
               <div className='w-full h-[20px] flex items-center

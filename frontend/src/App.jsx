@@ -3,14 +3,17 @@ import { Route, Routes } from 'react-router-dom'
 import Registration from './pages/Registration'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Nav from './component/Nav'
 
 function App() {
   return (
     <>
+    <Nav />
       <Routes>
         <Route path='/' element={<Home></Home>} />
         <Route path='/login' element={<Login></Login>} />
         <Route path='/signup' element={<Registration></Registration>} />
+      
       </Routes>
     </>
   )
