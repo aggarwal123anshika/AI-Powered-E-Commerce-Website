@@ -7,7 +7,9 @@ import { IoEye } from "react-icons/io5";
 import { useContext } from 'react';
 import { useState } from 'react';
 import { authDataContext } from '../context/authContext';
-import axios from "axios"
+import axios from "axios";
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../utils/Firebase';
 function Registration() {
     let [show, setShow] = useState(false)
     let {serverUrl} = useContext(authDataContext)
@@ -26,6 +28,21 @@ function Registration() {
         console.log(result.data)
       } catch (error) {
         console.log("Registration error:", error.response?.data);
+      }
+    }
+    const googleSignup = async () => {
+      try {
+          const response = await signInWithPopup(auth, provider)
+          let user = response.user;
+          let name = user.displayName;
+          let email = user.email;
+
+          const result = await axios.post(serverUrl + "/api/auth/googlelogin",
+            {name, email}, {withCredentials : true})
+            console.log(result.data)
+
+      } catch (error) {
+        console.log(error)
       }
     }
   return (
@@ -50,7 +67,7 @@ function Registration() {
         flex flex-col items-center justify-start gap=[20px]'>
             <div className='w-[90%] h-[50px] bg-[#42656cae]
             rounded-lg flex items-center justify-center gap=[10px]
-            py-[20px] cursor-pointer'>
+            py-[20px] cursor-pointer' onClick={googleSignup}>
                 <img src={google} alt="" className='w-[20px]'/> Registration With Google
             </div>
             <div className='w-full h-[20px] flex items-center
