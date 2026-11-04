@@ -16,6 +16,7 @@ function Login() {
   let [show, setShow] = useState(false)
   let [email, setEmail] = useState("")
   let [password, setPassword] = useState("")
+  let [loginError, setLoginError] = useState("")
   let {serverUrl} = useContext(authDataContext)
   let {getCurrentUser} = useContext(userDataContext)
 
@@ -23,16 +24,17 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault()
+    setLoginError("")
     try {
       let result = await axios.post(serverUrl + '/api/auth/login', {
         email, password
       }, {withCredentials : true})
       console.log(result.data)
-      getCurrentUser()
+      await getCurrentUser()
       navigate("/")
 
     } catch (error) {
-      console.log(error);
+      setLoginError(error.response?.data?.message || "Unable to log in. Please try again.")
     }
   }
 
@@ -46,6 +48,8 @@ function Login() {
             const result = await axios.post(serverUrl + "/api/auth/googlelogin",
               {name, email}, {withCredentials : true})
               console.log(result.data)
+              await getCurrentUser()
+              navigate("/")
   
         } catch (error) {
           console.log(error)
@@ -88,15 +92,22 @@ function Login() {
                  <input type="text" className='w-full h-[50px] border=[2px]
                 border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
                 placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Email'
-                 required onChange={(e) => setEmail(e.target.value)} value={email}/>
+                 required onChange={(e) => {
+                   setEmail(e.target.value)
+                   setLoginError("")
+                 }} value={email}/>
                  <input type={show?"text":"password"} className='w-full h-[50px] border=[2px]
                 border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent
                 placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Password'
-                 required onChange={(e) => setPassword(e.target.value)} value={password}/>
+                 required onChange={(e) => {
+                   setPassword(e.target.value)
+                   setLoginError("")
+                 }} value={password}/>
                  {!show && <IoEyeOutline className='w-[20px] h-[20px] cursor-pointer
                   absolute right-[5%] bottom-[57%]' onClick={() => setShow(prev => !prev)}/>}
                  {show && <IoEye className='w-[20px] h-[20px] cursor-pointer
                   absolute right-[5%] bottom-[57%]' onClick={() => setShow(prev => !prev)}/>}
+                 {loginError && <p role="alert" className="text-red-400">{loginError}</p>}
                  <button className='w-full h-[50px] bg-[#6060f5]
                  rounded-lg flex items-center justify-center mt-[20px]
                  text-[17px] font-semibold'>Login</button>

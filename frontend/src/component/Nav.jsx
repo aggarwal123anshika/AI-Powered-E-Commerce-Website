@@ -5,10 +5,25 @@ import { CgProfile } from "react-icons/cg";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { userDataContext } from '../context/UserContext';
 import { IoSearchCircle } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
+import { authDataContext } from '../context/authContext';
+import axios from 'axios';
 function Nav() {
-    let {userData} = useContext(userDataContext)
+    let {setUserData, userData} = useContext(userDataContext)
+    let {serverUrl} = useContext(authDataContext)
     let [showSearch, setShowSearch] = useState(false)
     let [showProfile, setShowProfile] = useState(false)
+    let navigate = useNavigate()
+
+    const handleLogout = async () => {
+        try {
+            const result = await axios.get(serverUrl + "/api/auth/logout",{withCredentials : true})
+            console.log(result.data)
+            setUserData(null)
+        } catch (error) {
+            console.error("Logout error:", error.response?.data ?? error)
+        }
+    }
   return (
     <div className='w-full h-[70px] bg-[#ecfafaec]
     z-10 fixed top-0 flex items-center justify-between
@@ -44,10 +59,12 @@ function Nav() {
          {showSearch && <IoSearchCircle className='w-[38px] h-[38px]
         text-[#000000] cursor-pointer' onClick={()=> setShowSearch(prev => !prev)}/>}
         {!userData && <CgProfile className='w-[29px] h-[29px] text-[#000000]
-        cursor-pointer'/>}
+        cursor-pointer' onClick={()=>setShowProfile
+        (prev=>!prev)}/>}
         {userData && <div className='w-[30px] h-[30px] bg-[#080808]
         text-[white] rounded-full flex items-center
-         justify-center'>{userData ?.name.slice(0,1)}</div>}
+         justify-center cursor-pointer' onClick={()=>setShowProfile
+         (prev=>!prev)}>{userData ?.name.slice(0,1)}</div>}
         <MdOutlineShoppingCart className='w-[30px] h-[30px] text-[#000000]
         cursor-pointer'/>
         <p className='absolute w-[18px] items-center md:flex
@@ -63,10 +80,27 @@ function Nav() {
             placeholder:text-white text-[white] text-[18px]
             'placeholder='Search Here' />
         </div>}
-        <div className='absolute w-[220px] h-[150px]
+        {showProfile && <div className='absolute w-[220px] h-[150px]
         bg-[#000000d7] top-[110%] right-[4%] border-[1px]
         border-[#aaa9a9] rounded-[10px] z-10'>
-        </div>
+            <ul className='w-full h-full flex items-start
+            justify-around flex-col text-[17px] py-[10px]
+            text-[white]'>
+                {!userData && <li className='w-full hover:bg-[#2f2f2f]
+                px-[15px] py-[10px] cursor-pointer' onClick={() =>
+                {navigate("/login");setShowProfile(false)
+                }}>Login</li>}
+                {userData && <li className='w-full hover:bg-[#2f2f2f]
+                px-[15px] py-[10px] cursor-pointer'
+                onClick={() => {handleLogout();setShowProfile(false)}}>
+                LogOut</li>}
+                <li className='w-full hover:bg-[#2f2f2f]
+                px-[15px] py-[10px] cursor-pointer'>Orders</li>
+                <li className='w-full hover:bg-[#2f2f2f]
+                px-[15px] py-[10px] cursor-pointer'>About</li>
+            </ul>
+
+        </div>}
     </div>
   )
 }
