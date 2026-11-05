@@ -28,7 +28,7 @@ function Login() {
     try {
       let result = await axios.post(serverUrl + '/api/auth/login', {
         email, password
-      }, {withCredentials : true})
+      },{}, {withCredentials : true})
       console.log(result.data)
       await getCurrentUser()
       navigate("/")

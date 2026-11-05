@@ -6,6 +6,9 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { userDataContext } from '../context/UserContext';
 import { IoSearchCircle } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import { IoMdHome } from "react-icons/io";
+import { HiOutlineCollection } from "react-icons/hi";
+import { MdContacts } from "react-icons/md";
 import { authDataContext } from '../context/authContext';
 import axios from 'axios';
 function Nav() {
@@ -29,13 +32,13 @@ function Nav() {
     z-10 fixed top-0 flex items-center justify-between
     px-[30px] shadow-md shadow-black'>
 
-        <div className='w-[30%] flex items-center justify-start
+        <div className='w-[20%] lg:w-[30%] flex items-center justify-start
         gap-[10px]'>
             <img src={logo} alt="" className='w-[30px]'/>
             <h1 className='text-[25px] text-[black]
             font-sans'>OneCart</h1>
         </div>
-        <div className='w-[40%]'>
+        <div className='w-[50%] lg:w-[40%] hidden md:flex'>
             <ul className='flex items-center justify-center
             gap-[19px] text-[white]'>
                 <li className='text-[15px] hover:bg-slate-500
@@ -66,11 +69,11 @@ function Nav() {
          justify-center cursor-pointer' onClick={()=>setShowProfile
          (prev=>!prev)}>{userData ?.name.slice(0,1)}</div>}
         <MdOutlineShoppingCart className='w-[30px] h-[30px] text-[#000000]
-        cursor-pointer'/>
+        cursor-pointer hidden md:block'/>
         <p className='absolute w-[18px] items-center md:flex
         justify-center bg-black px-[5px] py-[2px]
         text-white rounded-full text-[9px] top-[10px]
-        right-[23px]'>10</p>
+        right-[23px] hidden md:block'>10</p>
         </div>
        {showSearch && <div className='w-full h-[80px] bg-[#d8f6f9dd]
         absolute top-[100%] left-0 right-0 flex
@@ -99,8 +102,28 @@ function Nav() {
                 <li className='w-full hover:bg-[#2f2f2f]
                 px-[15px] py-[10px] cursor-pointer'>About</li>
             </ul>
-
         </div>}
+        <div className='w-full h-[90px] flex items-center
+        justify-between px-[20px] text-[12px] fixed bottom-0 left-0
+        bg-[#191818] md:hidden'>
+            <button className='text-[white] flex items-center
+            justify-center flex-col gap-[2px]'><IoMdHome
+            className='w-[25px] h-[25px] text-[white] md:hidden'/>
+            Home</button>
+            <button className='text-[white] flex items-center
+            justify-center flex-col gap-[2px]'><HiOutlineCollection
+            className='w-[25px] h-[25px] text-[white] md:hidden'/>
+            Collections</button>
+            <button className='text-[white] flex items-center
+            justify-center flex-col gap-[2px]'><MdContacts 
+            className='w-[25px] h-[25px] text-[white] md:hidden'/>
+            Contact</button>
+            <button className='text-[white] flex items-center
+            justify-center flex-col gap-[2px]'><MdOutlineShoppingCart
+            className='w-[25px] h-[25px]  text-[white] md:hidden'/>
+            Cart</button>
+        </div>
+
     </div>
   )
 }
