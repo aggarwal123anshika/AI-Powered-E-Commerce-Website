@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 let port = process.env.PORT || 8000;
 
 let app = express();
@@ -25,6 +26,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/product",productRoutes)
+
 
 app.listen(port, () => {
   console.log("Hello from Server");
