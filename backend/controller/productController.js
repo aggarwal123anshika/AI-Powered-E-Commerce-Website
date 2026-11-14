@@ -30,7 +30,7 @@ export const addProduct = async (req, res) => {
                 image4
             }
             
-            const product = await Product.create(productData)
+            const product = await productModel.create(productData)
 
             return res.status(201).json(product)
     } catch (error) {

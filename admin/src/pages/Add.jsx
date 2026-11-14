@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Nav from "../component/Nav"
 import Sidebar from "../component/Sidebar"
 import upload from '../assets/uploadImage.avif'
 import { useState } from 'react'
+import axios from 'axios'
+import { authDataContext } from '../context/AuthContext'
 
 function Add() {
   let [image1, setImage1] = useState(false)
@@ -16,9 +18,51 @@ function Add() {
   const [subCategory, setSubCategory] = useState("TopWear")
   const [bestseller, setBestSeller] = useState(false)
   const [sizes, setSizes] = useState([])
+  let {serverUrl} = useContext(authDataContext)
 
   const handleAddProduct = async (e) => {
+    e.preventDefault()
+      try {
+        let formData = new FormData()
+        formData.append("name",name)
+        formData.append("description",description)
+        formData.append("price",price)
+        formData.append("category",category)
+        formData.append("subCategory",subCategory)
+        formData.append("bestseller",bestseller)
+        formData.append("sizes",JSON.stringify(sizes))
+        // formData.append("image1",image1)
+        // formData.append("image2",image2)
+        // formData.append("image3",image3)
+        // formData.append("image4",image4)
+        if (image1) formData.append("image1", image1)
+        if (image2) formData.append("image2", image2)
+        if (image3) formData.append("image3", image3)
+        if (image4) formData.append("image4", image4)
 
+        let result = await axios.post(serverUrl + "/api/product/addproduct" , 
+          formData, {withCredentials : true})
+        
+        console.log(result.data)
+
+        if(result.data) {
+            setName("")
+            setDescription("")
+            setImage1(false)
+            setImage2(false)
+            setImage3(false)
+            setImage4(false)
+            setPrice("")
+            setBestSeller(false)
+            setCategory("Men")
+            setSubCategory("TopWear")
+        }
+
+      } catch (error) {
+            console.log("Error:", error)
+            console.log("Backend response:", error.response?.data)
+
+      }
   }
   return (
     <div className='w-[100vw] min-h-[100vh] bg-gradient-to-l 
@@ -29,8 +73,9 @@ function Add() {
 
 
       <div className='w-[82%] h-[100%] flex items-center
-      justify-start overflow-x-hidden absolute right-0'>
-        <form action="" className='w-[100%] md:w-[90%] h-[100%]
+      justify-start overflow-x-hidden absolute right-0 bottom
+      -[5%]'>
+        <form action="" onSubmit={handleAddProduct} className='w-[100%] md:w-[90%] h-[100%]
         mt-[70px] flex flex-col gap-[30px] py-[60px] px-[30px]
         md:px-[60px]'>
           <div className='w-[400px] h-[50px] text-[25px]
@@ -58,7 +103,7 @@ function Add() {
                 <img src={!image2 ? upload : URL.createObjectURL(image2)}
                  alt="" className='w-[80%] h-[80%] rounded-lg shadow-2xl
                  hover:border-[#1d1d1d] border-[2px]'/>
-                <input type="file" id='image1' hidden onChange={e=>
+                <input type="file" id='image2' hidden onChange={e=>
                 setImage2(e.target.files[0])} required/>
               </label>
 
@@ -68,7 +113,7 @@ function Add() {
                 <img src={!image3 ? upload : URL.createObjectURL(image3)}
                  alt="" className='w-[80%] h-[80%] rounded-lg shadow-2xl
                  hover:border-[#1d1d1d] border-[2px]'/>
-                <input type="file" id='image1' hidden onChange={e=>
+                <input type="file" id='image3' hidden onChange={e=>
                 setImage3(e.target.files[0])} required/>
               </label>
 
@@ -78,7 +123,7 @@ function Add() {
                 <img src={!image4 ? upload : URL.createObjectURL(image4)}
                  alt="" className='w-[80%] h-[80%] rounded-lg shadow-2xl
                  hover:border-[#1d1d1d] border-[2px]'/>
-                <input type="file" id='image1' hidden onChange={e=>
+                <input type="file" id='image4' hidden onChange={e=>
                 setImage4(e.target.files[0])} required/>
               </label>
             </div>
@@ -93,7 +138,7 @@ function Add() {
             className='w-[600px] max-w-[98%] h-[40px]
             rounded-lg hover:border-[#46d1f7] border-[2px] 
             cursor-pointer bg-slate-600 px-[20px] text-[18px] placeholder:text-
-            [#ffffffc2]' onChange={()=>setName(e.target.value)} value=
+            [#ffffffc2]' onChange={e=>setName(e.target.value)} value=
             {name} required/>
           </div>
 
@@ -106,7 +151,7 @@ function Add() {
             className='w-[600px] max-w-[98%] h-[100px]
             rounded-lg hover:border-[#46d1f7] border-[2px] 
             cursor-pointer bg-slate-600 px-[20px] py-[10px] text-[18px] placeholder:text-
-            [#ffffffc2]' onChange={()=>setDescription(e.target.value)}
+            [#ffffffc2]' onChange={e=>setDescription(e.target.value)}
             value={description} required/>
           </div>
 
@@ -204,7 +249,20 @@ function Add() {
             </div>
           </div>
           
-          <div></div>
+          <div className='w-[80%] flex items-center justify-start
+          gap-[10px] mt-[20px]'>
+            <input type="checkbox" id='checkbox' className='w-[25px] h-[25px]
+            cursor-pointer' onChange={()=>setBestSeller(prev => !prev)}/>
+            <label htmlFor="checkbox" className='text-[18px] md:
+            text-[22px] font-semibold'>
+              Add To BestSeller
+            </label>
+          </div>
+          <button className='w-[140px] px-[20px] py-[20px]
+          rounded-xl bg-[#65d8f7] flex items-center justify-center
+          gap-[10px] text-black active:bg-slate-700
+          active:text-white active:border-[2px] border-white'
+          >Add Product</button>
         </form>
       </div>
     </div>
