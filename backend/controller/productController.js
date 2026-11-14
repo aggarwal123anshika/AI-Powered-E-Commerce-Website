@@ -1,4 +1,5 @@
 import uploadOnCloudinary from "../config/cloudinary.js"
+// import Product from "../model/productModel.js";
 import productModel from "../model/productModel.js";
 
 export const addProduct = async (req, res) => {
@@ -38,3 +39,68 @@ export const addProduct = async (req, res) => {
             return res.status(500).json({message : `AddProduct error ${error}`})
     }
 }
+
+// export const listProduct = async (req, res) => {
+//     try {
+//         const product = await Product.find({});
+//         return res.status(200).json(product)
+
+//     } catch (error) {
+//         console.log("ListProduct Error")
+//         return res.status(500).json({message:`ListProduct Error ${error}`})
+//     }
+// }
+
+export const listProduct = async (req, res) => {
+    try {
+        const products = await productModel.find({});
+
+        console.log("Products found:", products.length);
+
+        return res.status(200).json(products);
+
+    } catch (error) {
+        console.log("ListProduct Error:", error);
+
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+// export const removeProduct = async (req, res) => {
+//     try {
+//         let {id} = req.params;
+//         const product = await Product.findByIdAndDelete(id);
+//         return res.status(200).json(product)
+//     } catch (error) {
+//         console.log("RemoveProduct Error")
+//         return res.status(500).json({message:`RemoveProduct Error ${error}`})
+//     }
+// }
+
+export const removeProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const product = await productModel.findByIdAndDelete(id);
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Product removed successfully",
+            product
+        });
+
+    } catch (error) {
+        console.log("RemoveProduct Error:", error);
+
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
