@@ -1,8 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import Title from '../component/Title';
+import Card from '../component/Card';
 import { shopDataContext } from '../context/ShopContext';
+
 
 function Collections() {
 
@@ -23,7 +25,12 @@ function Collections() {
   }
   
   const toggleSubCategory = (e) => {
-
+    if(category.includes(e.target.value)){
+        setSubCategory(prev => prev.filter
+        (item => item !== e.target.value))
+      } else {
+        setSubCategory(prev => [...prev, e.target.value])
+      }
   }
 
 
@@ -42,10 +49,18 @@ function Collections() {
     setFilterProduct(productCopy)
   }
 
+  useEffect(()=>{
+    setFilterProduct(products)
+  },[products])
+
+  useEffect(()=>{
+    applyFilter()
+  },[category, subCategory])
+
 
 
   return (
-    <div className='w-[100vw] min-h-[100vh] bg-gradient-to-l
+    <div className='w-[99vw] min-h-[100vh] bg-gradient-to-l
     from-[#141414] to-[#0c2025] flex items-start
     flex-col md:flex-row justify-start pt-[70px] 
     overflow-x-hidden z-[2]'>
@@ -72,15 +87,18 @@ function Collections() {
         items-start justify-center gap-[10px] flex-col'>
           <p className='flex items-center justify-center
           gap-[10px] text-[16px] font-light'>
-          <input type="checkbox" value={'Men'} className='w-3'/>
+          <input type="checkbox" value={'Men'} className='w-3'
+          onChange={toggleCategory}/>
           Men</p>
           <p className='flex items-center justify-center
           gap-[10px] text-[16px] font-light'>
-          <input type="checkbox" value={'Men'} className='w-3'/>
+          <input type="checkbox" value={'Men'} className='w-3'
+          onChange={toggleCategory} />
           Women</p>
           <p className='flex items-center justify-center
           gap-[10px] text-[16px] font-light'>
-          <input type="checkbox" value={'kids'} className='w-3'/>
+          <input type="checkbox" value={'kids'} className='w-3'
+          onChange={toggleCategory} />
           Kids</p>
         </div>
       </div>
@@ -94,15 +112,18 @@ function Collections() {
         items-start justify-center gap-[10px] flex-col'>
           <p className='flex items-center justify-center
           gap-[10px] text-[16px] font-light'>
-          <input type="checkbox" value={'TopWear'} className='w-3'/>
+          <input type="checkbox" value={'TopWear'} className='w-3'
+          onChange={toggleSubCategory} />
           TopWear</p>
           <p className='flex items-center justify-center
           gap-[10px] text-[16px] font-light'>
-          <input type="checkbox" value={'BottomWear'} className='w-3'/>
+          <input type="checkbox" value={'BottomWear'} className='w-3'
+          onChange={toggleSubCategory} />
           BottomWear</p>
           <p className='flex items-center justify-center
           gap-[10px] text-[16px] font-light'>
-          <input type="checkbox" value={'WinterWear'} className='w-3'/>
+          <input type="checkbox" value={'WinterWear'} className='w-3'
+          onChange={toggleSubCategory} />
           WinterWear</p>
         </div>
       </div>
@@ -127,7 +148,10 @@ function Collections() {
       min-h-[70vh] flex items-center justify-center
       flex-wrap gap-[30px]'>
         {
-
+          filterProduct.map((item, index)=>(
+            <Card key={index} id={item._id} name={item.name}
+            price={item.price} image={item.image1}/>
+          ))
         }
       </div>
     </div>
