@@ -17,7 +17,7 @@ function Card({name, image, id, price}) {
         <div className='text-[#f3fafa] text-[14px]'>
         {currency} {price}</div>
     </div>
-    <div className='w-[300px] max-w-[90%] h-[400px]
+    {/* <div className='w-[300px] max-w-[90%] h-[400px]
     bg-[#ffffff0a] backdrop:blur-lg rounded-lg
     hover:scale-[102%] flex items-start justify-start
     flex-col p-[10px] cursor-pointer border-[1px]
@@ -41,7 +41,7 @@ function Card({name, image, id, price}) {
         <div className='text-[#f3fafa] text-[14px]'>
         {currency} {price}</div>
     </div>
-    
+     */}
   </div>
   )
 }
