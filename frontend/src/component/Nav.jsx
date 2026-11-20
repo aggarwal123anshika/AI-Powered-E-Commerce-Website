@@ -11,10 +11,11 @@ import { HiOutlineCollection } from "react-icons/hi";
 import { MdContacts } from "react-icons/md";
 import { authDataContext } from '../context/authContext';
 import axios from 'axios';
+import { shopDataContext } from '../context/ShopContext';
 function Nav() {
     let {setUserData, userData} = useContext(userDataContext)
     let {serverUrl} = useContext(authDataContext)
-    let [showSearch, setShowSearch] = useState(false)
+    let {showSearch, setShowSearch, search, setSearch} = useContext(shopDataContext)
     let [showProfile, setShowProfile] = useState(false)
     let navigate = useNavigate()
 
@@ -58,7 +59,8 @@ function Nav() {
         <div className='w-[30%] flex items-center justify-end
         gap-[20px]'>
         {!showSearch && <IoSearchCircleOutline className='w-[38px] h-[38px]
-        text-[#000000] cursor-pointer' onClick={()=> setShowSearch(prev => !prev)}/>}
+        text-[#000000] cursor-pointer' onClick={()=> {setShowSearch(prev => !prev);
+        navigate("/collection")}}/>}
          {showSearch && <IoSearchCircle className='w-[38px] h-[38px]
         text-[#000000] cursor-pointer' onClick={()=> setShowSearch(prev => !prev)}/>}
         {!userData && <CgProfile className='w-[29px] h-[29px] text-[#000000]
@@ -81,7 +83,8 @@ function Nav() {
             <input type="text" className='lg:w-[50%] w-[80%] h-[60%]
             bg-[#233533] rounded-[30px] px-[50px]
             placeholder:text-white text-[white] text-[18px]
-            'placeholder='Search Here' />
+            'placeholder='Search Here' onChange={(e)=>{setSearch(e.target.value)}}
+            value={search}/>
         </div>}
         {showProfile && <div className='absolute w-[220px] h-[150px]
         bg-[#000000d7] top-[110%] right-[4%] border-[1px]

@@ -3,6 +3,7 @@ import Nav from '../component/Nav'
 import Background from '../component/Background'
 import Hero from '../component/Hero'
 import Product from './Product'
+import OurPolicy from '../component/OurPolicy'
 
 function Home() {
   let heroData = [
@@ -32,6 +33,7 @@ function Home() {
         heroData={heroData[heroCount]}/>
     </div>
     <Product />
+    <OurPolicy />
     </div>
   )
 }

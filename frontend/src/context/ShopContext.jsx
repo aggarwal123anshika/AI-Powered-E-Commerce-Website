@@ -4,6 +4,8 @@ import axios from 'axios';
 export const shopDataContext = createContext()
 function ShopContext({children}) {
     let [products, setProducts] = useState([]);
+    let [search, setSearch] = useState('')
+    let [showSearch, setShowSearch] = useState(false)
     let {serverUrl} = useContext(authDataContext)
     let currency = '₹';
     let delivery_fee = 40;
@@ -23,7 +25,8 @@ function ShopContext({children}) {
     },[])
 
     let value = {
-        products, currency, delivery_fee, getProducts
+        products, currency, delivery_fee, getProducts,search,
+        setSearch, showSearch, setShowSearch
     }
 
   return (

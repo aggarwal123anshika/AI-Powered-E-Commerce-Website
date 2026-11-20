@@ -9,7 +9,7 @@ import { shopDataContext } from '../context/ShopContext';
 function Collections() {
 
   let [showFilter, setShowFilter] = useState(false)
-  let {products} = useContext(shopDataContext);
+  let {products, search, showSearch} = useContext(shopDataContext);
   let [filterProduct, setFilterProduct] = useState([])
   let [category, setCategory] = useState([])
   let [subCategory, setSubCategory] = useState([])
@@ -36,6 +36,11 @@ function Collections() {
 
   const applyFilter = () => {
     let productCopy = products.slice()
+
+    if(showSearch && search) {
+      productCopy = productCopy.filter(item => 
+      item.name.toLowerCase().includes(search.toLowerCase()))
+    }
     if(category.length > 0) 
     {
       productCopy = productCopy.filter(item => category.
@@ -49,13 +54,37 @@ function Collections() {
     setFilterProduct(productCopy)
   }
 
+  const sortProducts = (e) => {
+    let fbCopy = filterProduct.slice()
+
+    switch(sortType) {
+      case 'low-high' : 
+          setFilterProduct(fbCopy.sort((a,b)=>
+          (a.price - b.price)))
+      break;
+
+      case 'high-low' : 
+          setFilterProduct(fbCopy.sort((a,b)=>
+          (b.price - a.price)))
+      break;
+
+      default : 
+          applyFilter()
+      break;
+    }
+  }
+
+  useEffect(()=>{
+    sortProducts()
+  },[sortType])
+
   useEffect(()=>{
     setFilterProduct(products)
   },[products])
 
   useEffect(()=>{
     applyFilter()
-  },[category, subCategory])
+  },[category, subCategory, search, showSearch])
 
 
 
@@ -63,7 +92,7 @@ function Collections() {
     <div className='w-[99vw] min-h-[100vh] bg-gradient-to-l
     from-[#141414] to-[#0c2025] flex items-start
     flex-col md:flex-row justify-start pt-[70px] 
-    overflow-x-hidden z-[2]'>
+    overflow-x-hidden z-[2] pb-[110px]'>
     <div className={`md:w-[30vw] lg:w-[20vw] w-[100vw]
     md:min-h-[100vh] ${showFilter ? "h-[45vh]" : "h-[8vh]"} 
     p-[20px] border-r-[1px]border-gray-400 text-[#aaf5fa] 
@@ -135,7 +164,7 @@ function Collections() {
         <select name="" id="" className='bg-slate-600
         w-[60%] md:w-[200px] h-[50px] px-[10px]
         text-[white] rounded-lg hover:border-[#46d1f7]
-        border-[2px]'>
+        border-[2px]' onChange={(e)=>setSortType(e.target.value)}>
           <option value="relavent" className='w-[100%] 
           h-[100%]'>Sort By: Relevant</option>
           <option value="low-high" className='w-[100%]
