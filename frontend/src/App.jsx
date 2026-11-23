@@ -10,6 +10,7 @@ import Product from "./pages/Product";
 import Nav from "./component/Nav";
 import { userDataContext } from "./context/UserContext";
 import Contact from "./pages/Contact";
+import ProductDetail from "./pages/ProductDetail";
 
 
 function App() {
@@ -47,6 +48,10 @@ function App() {
 
         <Route path="/Contact" element={userData ? <Contact/> : <Navigate to="/login" 
         state={{from : location.pathname}} />} />
+
+        <Route path="/productdetail/:productId" element={userData ? <ProductDetail/> : <Navigate to="/login" 
+        state={{from : location.pathname}} />} />
+        
         
 
       </Routes>
