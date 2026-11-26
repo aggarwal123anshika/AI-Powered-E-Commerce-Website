@@ -108,6 +108,7 @@ import { useParams } from 'react-router-dom'
 import { shopDataContext } from '../context/ShopContext'
 import { FaStar } from "react-icons/fa";
 import { FaStarHalf } from "react-icons/fa6";
+import RelatedProduct from '../component/RelatedProduct';
 
 function ProductDetail() {
     let {productId} = useParams()
@@ -291,6 +292,8 @@ function ProductDetail() {
                         those who value both fashion and function.
                     </p>
                 </div>
+                <RelatedProduct category={productData.category}
+                subCategory={productData.subCategory} currentProductId={productData._id}/>
             </div>
     </div>
   ) : <div className='opacity-0'></div>
