@@ -15,7 +15,7 @@ import { shopDataContext } from '../context/ShopContext';
 function Nav() {
     let {setUserData, userData} = useContext(userDataContext)
     let {serverUrl} = useContext(authDataContext)
-    let {showSearch, setShowSearch, search, setSearch} = useContext(shopDataContext)
+    let {showSearch, setShowSearch, search, setSearch, getCartCount} = useContext(shopDataContext)
     let [showProfile, setShowProfile] = useState(false)
     let navigate = useNavigate()
 
@@ -75,7 +75,7 @@ function Nav() {
         <p className='absolute w-[18px] items-center md:flex
         justify-center bg-black px-[5px] py-[2px]
         text-white rounded-full text-[9px] top-[10px]
-        right-[23px] hidden md:block'>10</p>
+        right-[23px] hidden md:block'>{getCartCount()}</p>
         </div>
        {showSearch && <div className='w-full h-[80px] bg-[#d8f6f9dd]
         absolute top-[100%] left-0 right-0 flex
@@ -133,7 +133,7 @@ function Nav() {
             <p className='absolute w-[18px] h-[18px] flex
             items-center justify-center bg-white px-[5px]
             py-[2px] text-black font-semibold rounded-full
-            text-[9px] top-[8px] right-[18px]'>10</p>
+            text-[9px] top-[8px] right-[18px]'>{getCartCount()}</p>
         </div>
 
     </div>
